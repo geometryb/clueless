@@ -1,0 +1,67 @@
+doctype html
+html
+    head
+        title Chat
+        style(type="text/css"): include client.css
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js')
+        script(src="/socket.io/socket.io.js")
+        script(src="Script.js")
+    body
+        div.container
+            header
+                h1 Clue Game
+            input(type='text')#setNameInput
+            div#characterSelect
+                button#colMustard Colonel Mustard
+                button#profPlum Professor Plum
+                button#mrGreen Mr.Green
+                button#mrsPeacock Mrs.Peacock
+                button#msScarlet Ms.Scarlett
+                button#mrsWhite Mrs.White
+            button#setName Set Name
+            div#chatEntries
+            div#chatControls
+                input(type='text')#messageInput
+                button#submit Send
+            canvas#gameBoard(width='600' height='600' style='border:1px solid #000000')   
+            div#boardControls
+                button#create Create
+            div#moveControls
+                button#up Up
+                button#down Down
+                button#left Left
+                button#right Right   
+            div#guess
+                select(name='card1')#card1
+                    option
+                    each item in ['colmustard', 'profplum', 'mrgreen', 'mrspeacock', 'msscarlet', 'mrswhite', 'knife','candlestick', 'revolver', 'rope', 'leadpipe', 'wrench', 'hall', 'lounge','diningroom', 'kitchen', 'ballroom', 'conservatory','billiard', 'library', 'study']
+                        option(value=item)=item
+                select(name='card2')#card2
+                    option
+                    each item in ['colmustard', 'profplum', 'mrgreen', 'mrspeacock', 'msscarlet', 'mrswhite', 'knife','candlestick', 'revolver', 'rope', 'leadpipe', 'wrench', 'hall', 'lounge','diningroom', 'kitchen', 'ballroom', 'conservatory','billiard', 'library', 'study']
+                        option(value=item)=item
+                 select(name='card3')#card3
+                    option
+                    each item in ['colmustard', 'profplum', 'mrgreen', 'mrspeacock', 'msscarlet', 'mrswhite', 'knife','candlestick', 'revolver', 'rope', 'leadpipe', 'wrench', 'hall', 'lounge','diningroom', 'kitchen', 'ballroom', 'conservatory','billiard', 'library', 'study']
+                        option(value=item)=item  
+                        
+            div#guessSubmit 
+                 button#Guess Guess     
+                 button#Accuse Accuse               
+            div#scoreSheetLabels
+                each item in ['colmustard', 'profplum', 'mrgreen', 'mrspeacock', 'msscarlet', 'mrswhite', 'knife','candlestick', 'revolver', 'rope', 'leadpipe', 'wrench', 'hall', 'lounge','diningroom', 'kitchen', 'ballroom', 'conservatory','billiard', 'library', 'study']
+                    li=item
+            div#scoreSheet
+                li    
+                                input(type='text', style='width:20px')
+                                input(type='text', style='width:20px')
+                                input(type='text', style='width:20px')
+                                input(type='text', style='width:20px')
+                                input(type='text', style='width:20px')
+                each item in ['colmustard', 'profplum', 'mrgreen', 'mrspeacock', 'msscarlet', 'mrswhite', 'knife','candlestick', 'revolver', 'rope', 'leadpipe', 'wrench', 'hall', 'lounge','diningroom', 'kitchen', 'ballroom', 'conservatory','billiard', 'library', 'study']
+                           li    
+                                input(type='text', style='width:20px')
+                                input(type='text', style='width:20px')
+                                input(type='text', style='width:20px')
+                                input(type='text', style='width:20px')
+                                input(type='text', style='width:20px')

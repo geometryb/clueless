@@ -1,0 +1,56 @@
+#gameBoard{
+	position:absolute;
+	top:100px;
+	left:400px;
+	
+	}
+	
+#chatEntries{
+	font-size:small;
+	}
+	
+#moveControls{
+	position: absolute;
+	top:720px;
+	left:850px;
+	}
+	
+#chatControls{
+	position:absolute;
+	left:50px;
+	top:720px;
+}
+
+#scoreSheetLabels{
+    line-height:120%;
+	position:absolute;
+	list-style:none;
+	left:1065px;
+	top:137px;
+	}
+
+#scoreSheet{
+	position:absolute;
+	list-style:none;
+	left:1150px;
+	top: 120px;
+	}
+	
+#characterSelect{
+	position:absolute;
+	top: 10px;
+	left: 450px;
+}
+
+#guess{
+	position:absolute;
+	top: 600px;
+	left:1050px;
+	}
+
+#guessSubmit{
+	position:absolute;
+	top:620px;
+	left:1050px;
+	
+	}
