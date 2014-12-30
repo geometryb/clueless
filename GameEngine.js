@@ -133,6 +133,12 @@ var Deck = [colmustard, profplum, mrgreen, mrspeacock, msscarlet, mrswhite, knif
 
 
 function shuffle(){
+    //pick a random between 0 and 6 for person
+    
+    //pick a random between 0 and 6 for weapon
+    //pick a random between 0 and 9 for room
+    
+    
 	//loop through the array swap each entry with another random card
 	var temp;
 	var swaplocation;
@@ -155,24 +161,7 @@ function shuffle(){
 			n++;
 		}
 	}
-	
-	console.log("playerlist 1" +playerlist[0].name);
-	
-	for (i=0; i<Deck.length; i++){
-		console.log("deck has " +Deck[i].name);
-	}
-	
-	for (i=0; i<Player1.cards.length; i++){
-		console.log("Player 1 has " +Player1.cards[i].name);
-	}
-	
-	for (i=0; i<Player2.cards.length; i++){
-		console.log("Player 2 has " +Player2.cards[i].name);
-	}
-	
-	for (i=0; i<winningcards.length; i++){
-		console.log("winningcards has " +winningcards[i].name);
-	}
+
 }
 
 

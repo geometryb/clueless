@@ -54,3 +54,18 @@
 	left:1050px;
 	
 	}
+	
+#yourCards{
+	position:absolute;
+    list-style:none;
+    left:450px;
+    top:710px;
+    font-size:small;
+	}
+
+	
+#cards{
+	position:absolute;
+    top:680px;
+    left:1050px;
+	}

@@ -3,10 +3,10 @@ var socket = io.connect();
 var x = 10;
 var y = 10;
 
-var me = {room: null, character: "none", name: "anonymous" };
-
-
-//var board = {player1: p1, player2: p2, player3: p3};
+var me = {room: null, character: "none", name: "anonymous", action:"none" };
+var players = []; 
+var showdestination ="";
+var unusedcolors = [];
 
 function Player(room, color){
 	this.room = room;
@@ -19,6 +19,16 @@ function Player(room, color){
 //#088A08 green
 //#BDBDBD white
 //#8A0886 purple
+function gameMessage(){
+        this.player=me.name;
+        this.action= "";
+        this.room= ""; //needs to be card1
+        this.direction=""; //needs to be card2
+        this.hallway=""; //needs to be card3
+        this.weapon="";
+        this.person="";
+        this.additionalMessage="";
+};
 
 
 
@@ -49,6 +59,7 @@ function Room(name,x,y){
 //ctx.clearRect(0,0,500,200);
 var r1 = 138; var r2=200; var r3=265; var r4=325; var r5=395;
 var c1 = 115; var c2=175; var c3=245; var c5=300; c6=372;
+//var c1_ = 125; var c2_=185; var c3_=255; var c5_=310; var c6_=382;
 var study = new Room("study",r1,c1); 
 var h1 = new Room("h1", r2,c1); 
 var hall = new Room("hall", r3, c1); 
@@ -79,14 +90,10 @@ var kitchen = new Room("kitchen",r5,c6); //kitchen.name="kitchen";
 
 
 
-var player1 = new Player(billiardroom, "#FFBF00");
-var player2 = new Player(kitchen, "#DF0101");
-var player3 = new Player(conservatory, "#8A0886");
-//#FFBF00 yellow
-//#DF0101 red
-//#088A08 green
-//#BDBDBD white
-//#8A0886 purple
+var player1;
+var player2;
+var player3;
+
 
 
 function drawBoard(){
@@ -99,21 +106,83 @@ function drawBoard(){
 	//clear the board
 
     //draw the board image
-    	ctx.drawImage(boardimage,10,10);
+    ctx.drawImage(boardimage,10,10);
     
+    
+    
+    for(i=0;i<players.length;i++){
+        ctx.fillStyle=players[i].color;
+        var playerRoom = getRoomFromText(players[i].room);
+        
+        if(i==1 || i ==2){
+            if (players[i].room == players[i-1].room){
+                var newy = playerRoom.y+10;
+                ctx.fillRect(playerRoom.x, newy, 20,20);
+            } else {
+                ctx.fillRect(playerRoom.x, playerRoom.y, 20,20);
+            }
+        }
+        if(i==0){
+
+           ctx.fillRect(playerRoom.x, playerRoom.y, 20,20);
+           
+        }
+      
+    }
+
+    //#FFBF00 yellow
+    //#DF0101 red
+    //#088A08 green
+    //#BDBDBD white
+    //#8A0886 purple
+    //#0000FF blue
+    var r=0;
+    var c=0;
+    if(unusedcolors.indexOf("#FFBF00")!=-1){
+        ctx.fillStyle="#FFBF00";
+        r=r5+80;
+        ctx.fillRect(r, c2, 20,20);
+    }
+    if(unusedcolors.indexOf("#DF0101")!=-1){
+        ctx.fillStyle="#DF0101";
+        c=c1-60;
+        ctx.fillRect(r4, c, 20,20);
+    }   
+    if(unusedcolors.indexOf("#088A08")!=-1){
+        ctx.fillStyle="#088A08";
+        c=c5+129;
+        ctx.fillRect(r2, c, 20,20);
+    }
+    if(unusedcolors.indexOf("#BDBDBD")!=-1){
+        ctx.fillStyle="#BDBDBD";
+        c=c5+129;
+        ctx.fillRect(r4, c, 20,20);
+    }
+    if(unusedcolors.indexOf("#8A0886")!=-1){
+        ctx.fillStyle="#8A0886";
+        r=r1-60;
+        ctx.fillRect(r, c2, 20,20);
+    }
+    if(unusedcolors.indexOf("#0000FF")!=-1){
+        ctx.fillStyle="#0000FF";
+        r=r1-60;
+        ctx.fillRect(r, 295, 20,20);
+    }    
+          
+     
     //draw player 1
-    ctx.fillStyle=player1.color;
-    ctx.fillRect(player1.room.x, player1.room.y, 20,20);
+    //ctx.fillStyle=player1.color;
+    //ctx.fillRect(player1.room.x, player1.room.y, 20,20);
     
     	
     //draw player2
-    ctx.fillStyle=player2.color;
-    ctx.fillRect(player2.room.x, player2.room.y,20,20);
+    //ctx.fillStyle=player2.color;
+    //ctx.fillRect(player2.room.x, player2.room.y,20,20);
     
     	
     //draw player3
-    ctx.fillStyle=player3.color;
-    ctx.fillRect(player3.room.x, player3.room.y,20,20);	
+    //ctx.fillStyle=player3.color;
+    //ctx.fillRect(player3.room.x, player3.room.y,20,20);	
     	
     	
     //ctx.fillStyle = "#FF0000";
@@ -128,26 +197,29 @@ function drawBoard(){
 
 
 function moveUp(){
-
-    socket.emit('move', "up");
+    me.action="up";
+    socket.emit('move message', me);
 }
 
 function moveDown(){
-
-    socket.emit('move', "down");
+    me.action="down";
+    socket.emit('move message', me);
 }
 
 function moveLeft(){
-
-    socket.emit('move', "left");
+    me.action=("left");
+    socket.emit('move message', me);
 }
 
 function moveRight(){
-
-    socket.emit('move', "right");
+    me.action=("right");
+    socket.emit('move message', me);
 }
 
-
+function moveSP(){
+    me.action=("sp");
+    socket.emit('move message', me);
+}
 
 //Displays a message
 function addMessage(msg){
@@ -184,6 +256,9 @@ function setName() {
         //$('#chatControls').show();
         //$('#pseudoInput').hide();
         //$('#setname').hide();
+        
+
+        
     }
 }
 
@@ -231,9 +306,11 @@ function getRoomFromText(text){
 		return h4;
 	} else if (text == "library"){
 		return library;
+	} else if (text == "h5"){
+		return h5;
 	} else if (text == "h6"){
-		return h6;
-	} else if (text=="billiardroom"){
+        return h6;
+    }else if (text=="billiardroom"){
 		return billiardroom;
 	} else if (text=="h7"){
 		return h7;
@@ -269,6 +346,7 @@ function setCharacter(character){
     $("#mrsPeacock").hide(); 
     $("#msScarlet").hide();
     $("#mrsWhite").hide();
+    $("#start").show();
 }
 
 function receiveCharacter(playername, character){
@@ -290,31 +368,153 @@ function receiveCharacter(playername, character){
 
 socket.on('character', function(data){
     receiveCharacter(data.name, data.character);
+
+    
 });
 
+
+socket.on('start', function(data){
+    
+    for (i=0; i<data.length; i++){
+        $("#player").append('<option>' +data[i]+'</option>');
+    }
+    drawBoard();
+});
+
+
+
+
+
+
+socket.on('create players', function(data){
+   players.push(data); 
+});
+
+socket.on('win', function(data){
+    alert("you win!");
+ });
+
+socket.on('show', function(data){
+    showdestination=data;
+});
+
+socket.on('update', function(data){
+    players=[];
+});
+
+socket.on('unused colors', function(data){
+    unusedcolors = data;
+    //alert(unusedcolors[0]+unusedcolors[1]+unusedcolors[2]);
+});
+
+
+socket.on('cards', function(data){
+   
+    var your_cards = "your cards: ";
+    var your_cards2 = "list 2";
+    if (data.card1 != ""){
+        your_cards = your_cards+" " +data.card1; 
+    }
+    
+    if (data.card2 != ""){
+        your_cards = your_cards+" " +data.card2; 
+    }
+    if (data.card3 != ""){
+        your_cards = your_cards+" " +data.card3; 
+    }
+    
+    if (data.card4 != ""){
+        your_cards = your_cards+" " +data.card4; 
+    }
+    
+    if (data.card5 != ""){
+        your_cards = your_cards+" " +data.card5; 
+    }
+    if (data.card6 != ""){
+        your_cards = your_cards+" " +data.card6; 
+    }
+    
+    
+    $('#yourCards').append('<li>' + your_cards + '</li>');
+
+    $("#showCards").append('<option>' +data.card1+'</option>');
+    $("#showCards").append('<option>' +data.card2+'</option>');
+    $("#showCards").append('<option>' +data.card3+'</option>');
+    $("#showCards").append('<option>' +data.card4+'</option>');
+    $("#showCards").append('<option>' +data.card5+'</option>');
+    $("#showCards").append('<option>' +data.card6+'</option>');
+});
+
+
+
 function Guess(){
-    alert("your guess is" + $('#card1').val() + " " + $('#card2').val() + " " + $('#card3').val() );
+    //alert("your guess is" + $('#card1').val() + " " + $('#card2').val() + " " + $('#card3').val() );
+    //var guess_message = new gameMessage();
+    //guess_message.card1 = $('#card1').val();
+    //guess_message.card2 = $('#card2').val();
+    //guess_message.card3 = $('#card3').val();
+    
+    var Guess = {source: me.name, player: $('#player').val(), card1: $('#card1').val(),card2: $('#card2').val(), card3: $('#card3').val()};
+
+    socket.emit('game message', Guess);
+
+    
+    
 }
+
+
+function Accuse(){
+    //alert("your guess is" + $('#card1').val() + " " + $('#card2').val() + " " + $('#card3').val() );
+    //var guess_message = new gameMessage();
+    //guess_message.card1 = $('#card1').val();
+    //guess_message.card2 = $('#card2').val();
+    //guess_message.card3 = $('#card3').val();
+    
+    var Guess = {source: me.name, player: $('#player').val(), card1: $('#card1').val(),card2: $('#card2').val(), card3: $('#card3').val()};
+
+    socket.emit('Accuse', Guess);
+
+    
+    
+}
+
+
+
+
+
+
+function showcard(){
+    var info={source:me.name, card: $("#showCards").val(), destination:showdestination};
+    
+    socket.emit('show', info);
+}
+
+
     
 
 $(function() {
     //$("#chatControls").hide();
     
-
+    $("#endTurn").click(function(){socket.emit('end turn', me);});
+    $("#Show").click(function(){showcard();});
+    $("#start").hide();
+    $("#start").click(function(){socket.emit('start', me); $("#start").hide();});
     $("#Guess").click(function(){Guess();});
+    $("#Accuse").click(function(){Accuse();});
     $("#colMustard").click(function(){setCharacter("Colonel Mustard");});
     $("#profPlum").click(function(){setCharacter("Professor Plum");});
     $("#mrGreen").click(function(){setCharacter("Mr Green");});
     $("#mrsPeacock").click(function(){setCharacter("Mrs Peacock");});
     $("#msScarlet").click(function(){setCharacter("Ms Scarlett");});
     $("#mrsWhite").click(function(){setCharacter("Mrs White");});
-    $("#setName").click(function() {setName();});
+    $("#setName").click(function() {setName(); $("#setName").hide(); document.getElementById('setNameInput').style.visibility = 'hidden';});
     $("#submit").click(function() {sentMessage();});
     $("#create").click(function() {drawBoard(); socket.emit('draw', "create");});
     $("#up").click(function() {moveUp();});
     $("#down").click(function() {moveDown();});
     $("#left").click(function() {moveLeft();});
-    $("#right").click(function() {moveRight();});    
+    $("#right").click(function() {moveRight();});
+    $("#sp").click(function() {moveSP();});     
 });
 
 

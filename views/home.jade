@@ -1,7 +1,7 @@
 doctype html
 html
     head
-        title Chat
+        title Clue
         style(type="text/css"): include client.css
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js')
         script(src="/socket.io/socket.io.js")
@@ -25,26 +25,32 @@ html
                 button#submit Send
             canvas#gameBoard(width='600' height='600' style='border:1px solid #000000')   
             div#boardControls
-                button#create Create
+                button#start Start
+                //button#create Create
             div#moveControls
                 button#up Up
                 button#down Down
                 button#left Left
-                button#right Right   
+                button#right Right  
+                button#sp SP
+                button#endTurn End 
             div#guess
                 select(name='card1')#card1
                     option
-                    each item in ['colmustard', 'profplum', 'mrgreen', 'mrspeacock', 'msscarlet', 'mrswhite', 'knife','candlestick', 'revolver', 'rope', 'leadpipe', 'wrench', 'hall', 'lounge','diningroom', 'kitchen', 'ballroom', 'conservatory','billiard', 'library', 'study']
+                    each item in ['colmustard', 'profplum', 'mrgreen', 'mrspeacock', 'msscarlet', 'mrswhite']
                         option(value=item)=item
                 select(name='card2')#card2
                     option
-                    each item in ['colmustard', 'profplum', 'mrgreen', 'mrspeacock', 'msscarlet', 'mrswhite', 'knife','candlestick', 'revolver', 'rope', 'leadpipe', 'wrench', 'hall', 'lounge','diningroom', 'kitchen', 'ballroom', 'conservatory','billiard', 'library', 'study']
+                    each item in ['knife','candlestick', 'revolver', 'rope', 'leadpipe', 'wrench']
                         option(value=item)=item
                  select(name='card3')#card3
                     option
-                    each item in ['colmustard', 'profplum', 'mrgreen', 'mrspeacock', 'msscarlet', 'mrswhite', 'knife','candlestick', 'revolver', 'rope', 'leadpipe', 'wrench', 'hall', 'lounge','diningroom', 'kitchen', 'ballroom', 'conservatory','billiard', 'library', 'study']
-                        option(value=item)=item  
-                        
+                    each item in ['hall', 'lounge','diningroom', 'kitchen', 'ballroom', 'conservatory','billiardroom', 'library', 'study']
+                        option(value=item)=item
+                  //select(name='player')#player
+            div#cards
+                select(name='showCards')#showCards
+                button#Show Show
             div#guessSubmit 
                  button#Guess Guess     
                  button#Accuse Accuse               
@@ -65,3 +71,5 @@ html
                                 input(type='text', style='width:20px')
                                 input(type='text', style='width:20px')
                                 input(type='text', style='width:20px')
+            div#yourCards
+                li                
